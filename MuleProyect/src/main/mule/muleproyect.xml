@@ -16,14 +16,29 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<flow name="Copy_of_muleproyectFlow" doc:id="7ef2889d-bcfa-413d-a68b-4e50e0fefa56" >
 		<http:listener doc:name="run" doc:id="0000631b-d40e-4eef-9cd6-4ddf98c2374c" config-ref="HTTP_Listener_config" path="/" />
 		<http:request method="GET" doc:name="Request" doc:id="e110b213-0ee3-44dc-be8e-610e903ef984" config-ref="ConeccionLocal" path="/get_datos"/>
-		<set-variable value="#[payload.id_usr]" doc:name="ID Usuario" doc:id="97708624-98a8-4a3e-aca1-79716a9d45fc" variableName="id_usr"/>
-		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message="#[vars.id_usr]" />
-		<http:request method="GET" doc:name="Request" doc:id="b25e26b5-8cc8-4539-b73a-7bd4e695f00c" config-ref="ObtenerUsuarios" sendCorrelationId="AUTO" path='/{id}'>
-			<http:uri-params ><![CDATA[#[output application/java
+		<set-variable value="#[payload.id_usr]" doc:name="ID Usuario" doc:id="97708624-98a8-4a3e-aca1-79716a9d45fc" variableName="id_usr" />
+		<flow-ref doc:name="Obtener Variables" doc:id="8b0d4b7d-ad39-4034-8f0b-49549e622ea6" name="ObtenerUsuario"/>
+		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message='#[vars.id_usr] ++"  " ++ #[vars.nombre]' />
+		<set-payload value='#[{"nombre":vars.nombre, 
+ "usuario":vars.usuario,
+ "corre": vars.correo,
+ "telefono": vars.telefono,
+ "pagina": vars.pagina
+	
+}]' doc:name="Set Payload" doc:id="00bcd7a9-57e7-4692-8d0d-9481e0d56729" />
+	</flow>
+	<flow name="ObtenerUsuario" doc:id="e80a03a8-521d-44c9-9429-f4e77bca0930" >
+		<http:request method="GET" doc:name="Request" doc:id="b25e26b5-8cc8-4539-b73a-7bd4e695f00c" config-ref="ObtenerUsuarios" sendCorrelationId="AUTO" path="/{id}">
+			<http:uri-params><![CDATA[#[output application/json
 ---
 {
 	"id" : vars.id_usr
 }]]]></http:uri-params>
 		</http:request>
+		<set-variable value="#[payload.name]" doc:name="nombre" doc:id="c9e35ddc-1443-49c1-8ae7-3a987645347c" variableName=" nombre"/>
+		<set-variable value="#[payload.username]" doc:name="usuario" doc:id="05dec071-2c20-48a7-b9e1-59c05d6b32f9" variableName="usuario"/>
+		<set-variable value="#[payload.email]" doc:name="correo" doc:id="d0cd7297-10cb-459e-827d-c54666566723" variableName="correo"/>
+		<set-variable value="#[payload.phone]" doc:name="telefono" doc:id="fdbc8900-48f2-495e-8825-12b0d4ea5540" variableName="telefono"/>
+		<set-variable value="#[payload.website]" doc:name="pagina" doc:id="5f137755-3fab-4990-bcf9-83d218a5739f" variableName="pagina"/>
 	</flow>
 </mule>
