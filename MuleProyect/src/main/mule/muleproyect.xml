@@ -10,9 +10,14 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:request-config name="ObtenerUsuarios" doc:name="HTTP Request configuration" doc:id="1001d952-27e1-4e38-9ee1-1eb53adf401f" basePath="/users" >
 		<http:request-connection host="jsonplaceholder.typicode.com" usePersistentConnections="false"/>
 	</http:request-config>
+	<http:request-config name="ConeccionLocal" doc:name="HTTP Request configuration" doc:id="cc971ac9-ca9f-4e67-9d59-82dabd25c4e9" >
+		<http:request-connection host="localhost" port="5050" />
+	</http:request-config>
 	<flow name="Copy_of_muleproyectFlow" doc:id="7ef2889d-bcfa-413d-a68b-4e50e0fefa56" >
 		<http:listener doc:name="run" doc:id="0000631b-d40e-4eef-9cd6-4ddf98c2374c" config-ref="HTTP_Listener_config" path="/" />
-		<set-variable value="4" doc:name="ID Usuario" doc:id="97708624-98a8-4a3e-aca1-79716a9d45fc" variableName="id_usr"/>
+		<http:request method="GET" doc:name="Request" doc:id="e110b213-0ee3-44dc-be8e-610e903ef984" config-ref="ConeccionLocal" path="/get_datos"/>
+		<set-variable value="#[payload.id_usr]" doc:name="ID Usuario" doc:id="97708624-98a8-4a3e-aca1-79716a9d45fc" variableName="id_usr"/>
+		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message="#[vars.id_usr]" />
 		<http:request method="GET" doc:name="Request" doc:id="b25e26b5-8cc8-4539-b73a-7bd4e695f00c" config-ref="ObtenerUsuarios" sendCorrelationId="AUTO" path='/{id}'>
 			<http:uri-params ><![CDATA[#[output application/java
 ---
@@ -20,6 +25,5 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	"id" : vars.id_usr
 }]]]></http:uri-params>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message="#[payload.name]"/>
 	</flow>
 </mule>
