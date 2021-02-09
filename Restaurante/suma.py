@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bienvenido al Restaurante"
+    return "hola mundo"
 
 
 @app.route('/num1')
@@ -33,4 +33,4 @@ def suma():
 
 
 if __name__ == '__main__':
-    app.run(port=5050)
+    app.run(port=1010)
