@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Proyecto ESB</title>
-</head>
-<body>
+{% extends "cabecera.html" %} {% block body %}
+    <div class="d-flex flex-row justify-content-center">
+        <div class="p-2 " style="width: 40%;">
+            <div class="card text-white bg-success ">
+                <div class="card-header">Formulario de Incio</div>
+                <div class="card-body pm20">
+                    <div class="input-group form-group">
+                        <form method="POST" action="/sendDatos">
+                            <label class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user">Seleccione ID de Persona</i>
+                                </span>
+                                <select class="form-select" aria-label="Default select example" name="id_usr">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </label>
+                            <input class=" btn btn-primary btn-block" type="submit" value="Enviar Datos">
+                        </form>
 
-</body>
-</html>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class=" p-2 " style="max-width: 40%;">
+            <div class="card text-white border-success ">
+                <div class="card-header text-secondary">Imagen</div>
+                <div class="card-body">
+                    <h5 class="card-title text-secondary">Success card title</h5>
+                    <p class="card-text text-secondary">Some quick example text to build on the card title and make up
+                        the bulk of
+                        the
+                        card's
+                        content.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

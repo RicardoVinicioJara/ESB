@@ -1,5 +1,6 @@
 from random import random
-from flask import request
+from flask import request, render_template
+import requests
 
 from flask import Flask
 
@@ -8,28 +9,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bienvenido al Restaurante"
+    return render_template("index.html")
 
 
-@app.route('/num1')
-def num1():
-    return {"num1": random()}
-
-
-@app.route('/num2')
-def num2():
-    return {"num2": random()}
-
-
-@app.route('/suma', methods=['POST'])
-def suma():
-    num1 = 0
-    num2 = 0
+@app.route('/sendDatos', methods=['POST'])
+def sendDatos():
     if request.method == 'POST':
-        num1 = request.json['num1']
-        num2 = request.json['num2']
-
-    return {"suma": num2 + num1}
+        id_usr = request.form['id_usr']
+        URL = "http://localhost:8081"
+        PARAMS = {'id_usr': id_usr}
+        r = requests.get(url=URL, params=PARAMS)
+        return r.json()
+    return "no Entro aca"
 
 
 if __name__ == '__main__':
