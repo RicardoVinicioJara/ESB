@@ -13,23 +13,41 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:request-config name="ConeccionLocal" doc:name="HTTP Request configuration" doc:id="cc971ac9-ca9f-4e67-9d59-82dabd25c4e9" >
 		<http:request-connection host="localhost" port="5050" />
 	</http:request-config>
+	<http:request-config name="ObtenerPerro" doc:name="HTTP Request configuration" doc:id="a50c9a48-3326-418c-8fc0-567f3b527f75" basePath="/api/breed">
+		<http:request-connection host="dog.ceo" usePersistentConnections="false"/>
+	</http:request-config>
 	<flow name="Copy_of_muleproyectFlow" doc:id="7ef2889d-bcfa-413d-a68b-4e50e0fefa56" >
 		<http:listener doc:name="run" doc:id="0000631b-d40e-4eef-9cd6-4ddf98c2374c" config-ref="HTTP_Listener_config" path="/" />
 		<http:request method="GET" doc:name="Request" doc:id="e110b213-0ee3-44dc-be8e-610e903ef984" config-ref="ConeccionLocal" path="/get_datos"/>
 		<set-variable value="#[payload.id_usr]" doc:name="ID Usuario" doc:id="97708624-98a8-4a3e-aca1-79716a9d45fc" variableName="id_usr" />
+		<set-variable value="#[payload.raza]" doc:name="raza" doc:id="002ea80c-c0ee-41e2-8b26-d96a696578d3" variableName="raza"/>
 		<flow-ref doc:name="Obtener Variables" doc:id="8b0d4b7d-ad39-4034-8f0b-49549e622ea6" name="ObtenerUsuario"/>
-		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message='#[vars.id_usr] ++"  " ++ #[vars.nombre]' />
+		<http:request method="GET" doc:name="Request" doc:id="d64ce17c-2718-46fe-8d83-f252def42a4c" config-ref="ObtenerPerro" path="/{raza}/images/random">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"raza" : vars.raza
+}]]]></http:uri-params>
+		</http:request>
+		<set-variable value="#[payload.message]" doc:name="Link IMG" doc:id="49de8af7-427c-452e-a8c2-a35c8b419d35" variableName="imagen"/>
+		<http:request method="POST" doc:name="GuardaImagne" doc:id="2b8170df-a594-4ede-ab30-9f6ae67bb10e" config-ref="ConeccionLocal" path="/guardarimagen">
+			<http:body ><![CDATA[#[{ "url":vars.imagen}]]]></http:body>
+		</http:request>
+		<set-variable value="#[payload.path]" doc:name="Path" doc:id="1acbc8b2-e4f3-4c37-a0a6-2809441045da" variableName="path"/>
+		<logger level="INFO" doc:name="Logger" doc:id="041220c7-2822-4bf6-93f0-f8810cd8f49c" message='#[vars.id_usr] ++"  "++#[vars.raza]' />
 		<set-payload value='#[{"nombre":vars.nombre, 
  "usuario":vars.usuario,
- "corre": vars.correo,
+ "correo": vars.correo,
  "telefono": vars.telefono,
- "pagina": vars.pagina
+ "pagina": vars.pagina,
+ "imagen": vars.imagen,
+ "path": vars.path
 	
 }]' doc:name="Set Payload" doc:id="00bcd7a9-57e7-4692-8d0d-9481e0d56729" />
 	</flow>
 	<flow name="ObtenerUsuario" doc:id="e80a03a8-521d-44c9-9429-f4e77bca0930" >
 		<http:request method="GET" doc:name="Request" doc:id="b25e26b5-8cc8-4539-b73a-7bd4e695f00c" config-ref="ObtenerUsuarios" sendCorrelationId="AUTO" path="/{id}">
-			<http:uri-params><![CDATA[#[output application/json
+			<http:uri-params><![CDATA[#[output application/java
 ---
 {
 	"id" : vars.id_usr
