@@ -6,7 +6,7 @@ import os
 from flask import Flask
 
 app = Flask(__name__)
-DAT = {}
+DAT = {'id_usr': 10, "raza": "boxer"}
 
 
 @app.route('/')
