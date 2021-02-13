@@ -1,10 +1,17 @@
 from flask import Flask
 import mysql.connector
+
 app = Flask(__name__)
 cnx = mysql.connector.connect(user='root', password='',
                               host='127.0.0.1',
                               database='productos')
 cursor = cnx.cursor()
+
+
+@app.route('/')
+def hello_world():
+    return "Hola Mund"
+
 
 @app.route('/')
 def hello_world():
@@ -19,6 +26,7 @@ def hello_world():
         print("{}, {}, {}, {}".format(
             ID, NOM, PRE, STK))
     return mydict
+
 
 if __name__ == '__main__':
     app.run()
