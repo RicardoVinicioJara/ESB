@@ -12,7 +12,11 @@ cursor = cnx.cursor()
 def hello_world():
     return "Hola Mund"
 
-
+"""
+Los productos son almacenados en 
+la base de datos y posterior pueden 
+ser consultados.
+"""
 @app.route('/get_productos', methods=['GET'])
 def productos():
     mydict = {}
