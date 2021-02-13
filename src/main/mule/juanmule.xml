@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8bb25710-604c-45b7-8d99-4f1854d9cbcf" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="ObtenerUsuarios" doc:name="HTTP Request configuration" doc:id="b452d235-9811-474d-8f4a-adc31a6820af" basePath="/users" >
+		<http:request-connection host="jsonplaceholder.typicode.com" usePersistentConnections="false"/>
+	</http:request-config>
+	<http:request-config name="ConeccionLocal" doc:name="HTTP Request configuration" doc:id="96f78d24-52a6-4559-b1a9-02f4578311ab" >
+		<http:request-connection host="localhost" port="5050" />
+	</http:request-config>
+	<http:request-config name="ObtenerPerro" doc:name="HTTP Request configuration" doc:id="080dc709-943b-4207-b6e2-723c389d5fbf" basePath="/api/breed">
+		<http:request-connection host="dog.ceo" usePersistentConnections="false"/>
+	</http:request-config>
+	<flow name="Copy_of_muleproyectFlow" doc:id="f007691b-ede4-43d7-ab5e-84d1234d9ede" >
+		<http:listener doc:name="run" doc:id="919ac4cc-4c17-4fce-93ec-5b10f11cdb80" config-ref="HTTP_Listener_config" path="/" />
+		<http:request method="GET" doc:name="Request" doc:id="8e5f8e6f-38be-49e0-9a0a-d8c75c0f7bad" config-ref="ConeccionLocal" path="/get_datos"/>
+		<set-variable value="#[payload.id_usr]" doc:name="ID Usuario" doc:id="824268be-e704-48b3-a71e-2fef30303211" variableName="id_usr" />
+		<set-variable value="#[payload.raza]" doc:name="raza" doc:id="16efa1a6-4e1d-4048-b9a3-4c3ebcd682d6" variableName="raza"/>
+		<flow-ref doc:name="Obtener Variables" doc:id="bffd7e32-f449-4a43-a993-c19fe417ebbd" name="ObtenerUsuario"/>
+		<http:request method="GET" doc:name="Request" doc:id="22b0f50f-6ef7-4e3a-9afa-4ba33f69e076" config-ref="ObtenerPerro" path="/{raza}/images/random">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"raza" : vars.raza
+}]]]></http:uri-params>
+		</http:request>
+		<set-variable value="#[payload.message]" doc:name="Link IMG" doc:id="bcdcd060-6d6b-4aec-94c7-eba9a95512af" variableName="imagen"/>
+		<http:request method="POST" doc:name="GuardaImagne" doc:id="613e4568-9050-4008-9ce6-292f4f74c68b" config-ref="ConeccionLocal" path="/guardarimagen">
+			<http:body ><![CDATA[#[{ "url":vars.imagen}]]]></http:body>
+		</http:request>
+		<set-variable value="#[payload.path]" doc:name="Path" doc:id="91e35b0c-8587-4902-8099-fb806f43b3f1" variableName="path"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c19ac1e0-b08b-4cf9-9d5d-51482f699627" message='#[vars.id_usr] ++"  "++#[vars.raza]' />
+		<set-payload value='#[{"nombre":vars.nombre, 
+ "usuario":vars.usuario,
+ "correo": vars.correo,
+ "telefono": vars.telefono,
+ "pagina": vars.pagina,
+ "imagen": vars.imagen,
+ "path": vars.path
+	
+}]' doc:name="Set Payload" doc:id="eca54f43-4621-4205-87f0-1c762e34d975" />
+	</flow>
+	<flow name="ObtenerUsuario" doc:id="3518a4e0-a1b2-4d41-85c6-d3f8a03da4bc" >
+		<http:request method="GET" doc:name="Request" doc:id="598b7aaf-3e0d-4d85-807a-0139f7cbf65d" config-ref="ObtenerUsuarios" sendCorrelationId="AUTO" path="/{id}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id" : vars.id_usr
+}]]]></http:uri-params>
+		</http:request>
+		<set-variable value="#[payload.name]" doc:name="nombre" doc:id="1bf69846-a071-4ddf-b411-0081562cb36c" variableName=" nombre"/>
+		<set-variable value="#[payload.username]" doc:name="usuario" doc:id="154aa343-9906-45ff-bf2a-0a47817df128" variableName="usuario"/>
+		<set-variable value="#[payload.email]" doc:name="correo" doc:id="409e72a8-0f7b-4b6f-8d63-58c226cf41c7" variableName="correo"/>
+		<set-variable value="#[payload.phone]" doc:name="telefono" doc:id="5202dd17-7e74-4bd7-a8c2-00aa3adbf75c" variableName="telefono"/>
+		<set-variable value="#[payload.website]" doc:name="pagina" doc:id="da029e88-72e6-4d4b-9e5c-f35ef677b39e" variableName="pagina"/>
+	</flow>
+</mule>
