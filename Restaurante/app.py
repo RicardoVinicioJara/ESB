@@ -6,7 +6,8 @@ import os
 from flask import Flask
 
 app = Flask(__name__)
-DAT = {'id_usr': 10, "raza": "boxer"}
+DAT = {'id_usr': 5, "raza": "boxer"}
+#DAT = {}
 
 
 @app.route('/')
@@ -36,6 +37,9 @@ def sendDatos():
         DAT.update(dat)
         url = "http://localhost:8081"
         r = requests.get(url=url, params=dat)
+
+
+
         r = r.json()
         return render_template("index.html", datos=r)
     return "no Entro aca"

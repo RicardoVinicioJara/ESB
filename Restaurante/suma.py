@@ -21,7 +21,7 @@ def num2():
     return {"num2": random()}
 
 
-@app.route('/suma', methods=['POST'])
+@app.route('/suma', methods=['POST', 'GET'])
 def suma():
     num1 = 0
     num2 = 0

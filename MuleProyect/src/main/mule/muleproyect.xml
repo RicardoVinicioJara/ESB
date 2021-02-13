@@ -23,7 +23,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<set-variable value="#[payload.raza]" doc:name="raza" doc:id="002ea80c-c0ee-41e2-8b26-d96a696578d3" variableName="raza"/>
 		<flow-ref doc:name="Obtener Variables" doc:id="8b0d4b7d-ad39-4034-8f0b-49549e622ea6" name="ObtenerUsuario"/>
 		<http:request method="GET" doc:name="Request" doc:id="d64ce17c-2718-46fe-8d83-f252def42a4c" config-ref="ObtenerPerro" path="/{raza}/images/random">
-			<http:uri-params ><![CDATA[#[output application/java
+			<http:uri-params><![CDATA[#[output application/java
 ---
 {
 	"raza" : vars.raza

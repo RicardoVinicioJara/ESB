@@ -1,5 +1,5 @@
 <!--[if IE]>
-  Esto sólo lo ve Internet Explorer
+Esto sólo lo ve Internet Explorer
 <![endif]-->
 
 {% extends "cabecera.html" %} {% block body %}
@@ -55,40 +55,48 @@
             <div class="card text-white border-success ">
                 <div class="card-header text-secondary">Datos Sugeridos del Sistema</div>
                 <div class="card-body pm20">
-                            {% if datos %}
-                                <label class="input-group-prepend">
+                    {% if datos %}
+                        <label class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="fas fa-user">Nombre</i>
                                 </span>
-                                    <label class="input-group-text"> {{ datos.nombre }}</label>
-                                </label>
-                                <label class="input-group-prepend">
+                            <label class="input-group-text"> {{ datos.nombre }}</label>
+                        </label>
+                        <label class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="fas fa-user">Usuario</i>
                                 </span>
-                                    <label class="input-group-text">{{ datos.usuario }}</label>
-                                </label>
-                                <label class="input-group-prepend">
+                            <label class="input-group-text">{{ datos.usuario }}</label>
+                        </label>
+                        <label class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="fas fa-user">Correo</i>
                                 </span>
-                                    <label class="input-group-text"> {{ datos.correo }}</label>
-                                </label>
-                                <label class="input-group-prepend">
+                            <label class="input-group-text"> {{ datos.correo }}</label>
+                        </label>
+                        <label class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="fas fa-user">Telefono</i>
                                 </span>
-                                    <label class="input-group-text"> {{ datos.telefono }}</label>
-                                </label>
-                                <label class="input-group-prepend">
+                            <label class="input-group-text"> {{ datos.telefono }}</label>
+                        </label>
+                        <label class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="fas fa-user">Pagina</i>
                                 </span>
-                                    <label class="input-group-text"><a target="_blank"
-                                                                       href="http://www.{{ datos.pagina }}"> {{ datos.pagina }}</a></label>
-                                </label>
-                                <img src="{{ datos.imagen }}" alt="Perro" class="img-fluid" width="100%" height="100%">
-                            {% endif %}
+                            <label class="input-group-text"><a target="_blank"
+                                                               href="http://www.{{ datos.pagina }}"> {{ datos.pagina }}</a></label>
+                        </label>
+                        <label class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user">IMAGEN</i>
+                                </span>
+                            <label class="input-group-text"><a target="_blank"
+                                                               href="file:///{{ datos.path }}">
+                                file:///{{ datos.path }}</a></label>
+                        </label>
+                        <img src="{{ datos.imagen }}" alt="Perro" class="img-fluid" width="100%" height="100%">
+                    {% endif %}
                 </div>
             </div>
         </div>
