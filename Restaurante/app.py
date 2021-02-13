@@ -57,7 +57,8 @@ def getProductos():
     if request.method == 'POST':
         cant1 = request.form['cant1']
         cant2 = request.form['cant2']
-        dat = {'tipo': 2, 'cant1': cant1, "cant2": cant2}
+        stock = request.form['stock']
+        dat = {'tipo': 2, 'cant1': cant1, "cant2": cant2, "stock": stock}
         DAT.update(dat)
         url = "http://localhost:8081"
         r = requests.get(url=url)

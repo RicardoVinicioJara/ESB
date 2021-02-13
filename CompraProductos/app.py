@@ -18,13 +18,17 @@ def productos():
     mydict = {}
     cant1 = request.args.get('cant1')
     cant2 = request.args.get('cant2')
+    stock = request.args.get('stock')
+    sql = """UPDATE producto SET stock = stock - %s 
+            where precio between %s and %s;
+          """
+    cursor.execute(sql, (stock, cant1, cant2))
+    cnx.commit()
     query = (""" select * from producto 
                  where precio between %s and %s; """)
     cursor.execute(query, (cant1, cant2))
     for (ID, NOM, PRE, STK) in cursor:
         mydict[str(ID)] = {"id": ID, "nombre": NOM, "precio": PRE, "stock": STK}
-        print("{}, {}, {}, {}".format(
-            ID, NOM, PRE, STK))
     return mydict
 
 

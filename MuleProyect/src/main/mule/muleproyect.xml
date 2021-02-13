@@ -35,12 +35,14 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			<when expression="#[vars.tipo == 2]">
 				<set-variable value="#[payload.cant1]" doc:name="cant1" doc:id="6d3fa9e5-4497-4622-9095-a380ae1a9cbe" variableName="cant1"/>
 				<set-variable value="#[payload.cant2]" doc:name="cant2" doc:id="c0f05b4d-d54b-4648-96d2-123f3ce3de52" variableName="cant2"/>
+				<set-variable value="#[payload.stock]" doc:name="can Stock" doc:id="604b50a3-86e9-4113-b8b3-2d3526a993c3" variableName="canstock"/>
 				<http:request method="GET" doc:name="Request" doc:id="70410ba2-ace4-4b8e-ab82-4e4a26919c83" config-ref="BaseDatos" path="/get_productos">
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
 	"cant2" : vars.cant2,
-	"cant1" : vars.cant1
+	"cant1" : vars.cant1,
+	"stock" : vars.canstock
 }]]]></http:query-params>
 				</http:request>
 				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d871a127-bf78-4ac7-9bba-13670e66afce" />
