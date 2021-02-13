@@ -11,22 +11,33 @@ DAT = {'tipo': 2, 'id_usr': 5, "raza": "boxer"}
 
 # DAT = {}
 
-
-@app.route('/')
-def home():
-    return render_template("index.html")
-
-
+"""
+Este metodo nos permite controlar los errores
+devolviendonos un diccionario  json con el mensaje.
+"""
 @app.route('/error')
 def error():
     return {"error": "error"}
 
-
+"""
+Obtiene los datos para prueba
+"""
 @app.route('/get_datos')
 def get_datos():
     return DAT
 
+"""
+Metodo que nos permite renderizar el index
+la vista donde estamos mostrando la informacion. 
+"""
+@app.route('/')
+def home():
+    return render_template("index.html")
 
+"""
+Recuperamos la imagen desde la url
+y mandamos a guardar en el directorio del proyecto.
+"""
 @app.route('/guardarimagen', methods=['POST'])
 def guardar_imagen():
     url = request.json['url']
@@ -34,7 +45,11 @@ def guardar_imagen():
     urllib.request.urlretrieve(url, "static/img/perro.jpg")
     return {'path': os.path.abspath("static/img/perro.jpg")}
 
-
+"""
+Enviamos los datos recuperados, a que se renderizen
+en la pagina index html, y le pasamos un conjunto
+de datos  a la url.
+"""
 @app.route('/sendDatos', methods=['POST'])
 def sendDatos():
     if request.method == 'POST':
@@ -51,7 +66,10 @@ def sendDatos():
             return render_template("index.html", datos=js)
     return render_template("error.html")
 
-
+"""
+Obtenemos los productos, donde existe la
+cantidad, precio y stock disponible.
+"""
 @app.route('/getProductos', methods=['POST'])
 def getProductos():
     if request.method == 'POST':
