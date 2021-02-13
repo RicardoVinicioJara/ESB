@@ -6,13 +6,20 @@ import os
 from flask import Flask
 
 app = Flask(__name__)
-DAT = {'id_usr': 5, "raza": "boxer"}
-#DAT = {}
+DAT = {'tipo': 2, 'id_usr': 5, "raza": "boxer"}
+
+
+# DAT = {}
 
 
 @app.route('/')
 def home():
     return render_template("index.html")
+
+
+@app.route('/error')
+def error():
+    return {"error": "error"}
 
 
 @app.route('/get_datos')
@@ -33,13 +40,32 @@ def sendDatos():
     if request.method == 'POST':
         id_usr = request.form['id_usr']
         raza = request.form['raza']
-        dat = {'id_usr': id_usr, "raza": raza}
+        dat = {'tipo': 1, 'id_usr': id_usr, "raza": raza}
         DAT.update(dat)
         url = "http://localhost:8081"
         r = requests.get(url=url, params=dat)
 
+        js = r.json()
+        print(js)
+        if js['estado']:
+            return render_template("index.html", datos=js)
+    return render_template("error.html")
 
 
-        r = r.json()
-        return render_template("index.html", datos=r)
-    return "no Entro aca"
+@app.route('/getProductos', methods=['POST'])
+def getProductos():
+    if request.method == 'POST':
+        cant1 = request.form['cant1']
+        cant2 = request.form['cant2']
+        dat = {'tipo': 2, 'cant1': cant1, "cant2": cant2}
+        DAT.update(dat)
+        url = "http://localhost:8081"
+        r = requests.get(url=url)
+        js = r.json()
+        lista = []
+        list_id = list(js.keys())
+        for i in list_id:
+            lista.append([js[str(i)]['id'], js[str(i)]['nombre'], js[str(i)]['precio'], js[str(i)]['stock']])
+        print(js)
+        print(lista)
+        return render_template("index.html", lista=lista)
